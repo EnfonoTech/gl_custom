@@ -14,7 +14,7 @@ def execute(filters=None):
 			"width": 200
 		},
 		{
-			"fieldname": "custom_awb_mbl",
+			"fieldname": "custom_awb__mbl",
 			"label": "AWB/MBL No",
 			"fieldtype": "Data",
 			"width": 150
@@ -93,8 +93,8 @@ def execute(filters=None):
 	
 	# Check for custom fields
 	meta = frappe.get_meta('Sales Invoice')
-	if meta.has_field('custom_awb_mbl'):
-		fields.append('custom_awb_mbl')
+	if meta.has_field('custom_awb__mbl'):
+		fields.append('custom_awb__mbl')
 
 	if meta.has_field('custom_remarks_custom'):
 		fields.append('custom_remarks_custom')
