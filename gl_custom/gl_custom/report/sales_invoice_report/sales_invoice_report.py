@@ -62,21 +62,19 @@ def execute(filters=None):
 		'docstatus': 1
 	}
 	data = []
-	# address_display = None
+	address_display = None
 	if filters:
 		if filters.customer:
 			condns['customer'] = filters.customer
-			# address_name = frappe.db.get_value("Dynamic Link", {
-			# 	"link_doctype": "Customer",
-			# 	"link_name": filters.customer,
-			# 	"parenttype": "Address"
-			# }, "parent")
+			address_name = frappe.db.get_value("Dynamic Link", {
+				"link_doctype": "Customer",
+				"link_name": filters.customer,
+				"parenttype": "Address"
+			}, "parent")
 
-			# if address_name:
-			# 	address_doc = frappe.get_doc("Address", address_name)
-			# 	address_display = get_address_display(address_doc.as_dict())
-			# 	# filters["address_display"] = address_display
-			# frappe.errprint(address_display)
+			if address_name:
+				address_doc = frappe.get_doc("Address", address_name)
+				address_display = get_address_display(address_doc.as_dict())
 
 		if filters.from_date and filters.to_date:
 			condns["posting_date"] = ["between", [filters.from_date, filters.to_date]]
@@ -123,11 +121,14 @@ def execute(filters=None):
 	if invoices and len(invoices) != 0:
 		running_sum = 0
 
-		for invoice in invoices:
+		for idx, invoice in enumerate(invoices):
 			running_sum += invoice.outstanding_amount
 			invoice['transaction'] = "Debit Note"
 			invoice['payments'] = invoice.grand_total - invoice.outstanding_amount
 			invoice['balance'] = running_sum
+
+			if idx == 0 and address_display:
+				invoice["primary_address"] = address_display
 
 		data += invoices
 
@@ -140,7 +141,8 @@ def execute(filters=None):
 			"transaction": f"Balance Due (As of {today()})",
 			"grand_total": None,
 			"payments": None,
-			"balance": invoices[-1].balance
+			"balance": invoices[-1]["balance"],
+			"primary_address": None  
 		})
 
 		return columns, data

@@ -100,7 +100,12 @@
         <div class="company-info">
             TO<br>
             {% if (filters.customer) { %}
-                {%= filters.customer %}
+                <strong>{%= filters.customer %}</strong><br>
+                {% if (data[0].primary_address) { %}
+                    <div style="margin-top: 5px;">
+                        {%= data[0].primary_address %}
+                    </div>
+                {% } %}
             {% } %}
         </div>
     </div>
