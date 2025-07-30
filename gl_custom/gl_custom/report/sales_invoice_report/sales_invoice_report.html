@@ -119,6 +119,13 @@
         }
     %}
 
+    {% 
+        var total_grand = 0;
+        for (var i = 0, l = data.length - 1; i < l; i++) {
+            total_grand += flt(data[i].grand_total) || 0;
+        }
+    %}
+
     <div style="display: flex; justify-content: flex-end;">
         <div class="balance-summary">
             <div>
@@ -127,15 +134,15 @@
             </div>
             <div>
                 <span class="label">Invoiced Amount:</span>
-                <span class="text-right">{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</span>
+                <span class="text-right">SAR {%= (total_grand).toFixed(2) %}</span>
             </div>
             <div>
                 <span class="label">Amount Received:</span>
-                <span class="text-right">{%= format_currency(total_payments, 'SAR', 2) %}</span>
+                <span class="text-right">SAR {%= (total_payments).toFixed(2) %}</span>
             </div>
             <div>
                 <span class="label">Balance Due:</span>
-                <span class="text-right"><strong>{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</strong></span>
+                <span class="text-right"><strong>SAR {%= (data[data.length - 1].balance || 0).toFixed(2) %}</strong></span>
             </div>
         </div>
     </div>
@@ -177,9 +184,9 @@
                     <td>{%= data[i].custom_remarks_custom || '' %}</td>
                     <td>{%= frappe.datetime.str_to_user(data[i].posting_date) %}</td>
                     <td>{%= data[i].name %}</td>
-                    <td class="text-right">{%= format_currency(data[i].grand_total, 'SAR', 2) %}</td>
-                    <td class="text-right">{%= format_currency(data[i].payments, 'SAR', 2) %}</td>
-                    <td class="text-right">{%= format_currency(data[i].balance, 'SAR', 2) %}</td>
+                    <td class="text-right">{%= (data[i].grand_total || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[i].payments || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[i].balance || 0).toFixed(2) %}</td>
                 </tr>
                 {% row_number++; %}
             {% } %}
@@ -188,7 +195,7 @@
             <tr class="bold-row">
                 <td></td>
                 <td colspan="7">{%= data[data.length - 1].transaction %}</td>
-                <td class="text-right">{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</td>
+                <td class="text-right">SAR {%= (data[data.length - 1].balance|| 0).toFixed(2) %}</td>
             </tr>
         </tbody>
     </table>

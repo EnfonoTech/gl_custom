@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.utils import today
+from frappe.contacts.doctype.address.address import get_address_display
 
 def execute(filters=None):
 	# frappe.errprint(filters)
@@ -61,9 +62,22 @@ def execute(filters=None):
 		'docstatus': 1
 	}
 	data = []
+	# address_display = None
 	if filters:
 		if filters.customer:
 			condns['customer'] = filters.customer
+			# address_name = frappe.db.get_value("Dynamic Link", {
+			# 	"link_doctype": "Customer",
+			# 	"link_name": filters.customer,
+			# 	"parenttype": "Address"
+			# }, "parent")
+
+			# if address_name:
+			# 	address_doc = frappe.get_doc("Address", address_name)
+			# 	address_display = get_address_display(address_doc.as_dict())
+			# 	# filters["address_display"] = address_display
+			# frappe.errprint(address_display)
+
 		if filters.from_date and filters.to_date:
 			condns["posting_date"] = ["between", [filters.from_date, filters.to_date]]
 		elif filters.from_date and not filters.to_date:
