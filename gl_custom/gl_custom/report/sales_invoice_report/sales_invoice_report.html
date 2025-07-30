@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Statement of Accounts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 9pt;
+            margin: 0;
+            padding: 10px;
+        }
+        .header-image {
+            width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+        }
+        .header-section {
+            margin-bottom: 10px;
+        }
+        .company-info {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 10px;
+        }
+        .statement-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #333;
+            text-align: right;
+            margin-bottom: 5px;
+        }
+        .statement-period {
+            font-size: 10pt;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .balance-summary {
+            display: flex;
+            flex-direction: column;
+            justify-content: end !important;
+            gap: 3px;
+            margin-bottom: 10px;
+            margin-left: auto;
+            width: auto; /* Changed from fit-content */
+            min-width: 0; /* Prevents unwanted expansion */
+        }
+
+        .balance-summary div {
+            display: flex;
+            justify-content: space-between;
+            width: 100%; /* Ensures full width within container */
+        }
+
+        .balance-summary .label {
+            font-weight: bold;
+            padding-right: 10px;
+            border: none !important;
+            text-align: left;
+            white-space: nowrap; /* Prevents line breaks */
+        }
+
+        .balance-summary .text-right {
+            text-align: right;
+            min-width: 100px; /* Fixed width for values */
+            padding-left: 10px; /* Space between label and value */
+        }
+
+        .balance-summary strong {
+            border: none !important;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 3px;
+            text-align: center;
+        }
+        thead th {
+            background-color: #f0f0f0;
+            padding: 4px;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .bold-row {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://logistica.enfonoerp.com/files/Screenshot%20from%202025-03-19%2020-48-33.png" class="header-image" alt="Company Logo">
+
+    <div class="header-section">
+        <div class="company-info">
+            TO<br>
+            {% if (filters.customer) { %}
+                {%= filters.customer %}
+            {% } %}
+        </div>
+    </div>
+
+    <div class="statement-title">Statement of Accounts</div>
+    <div class="statement-period">
+        {% if (filters.from_date && filters.to_date) { %}
+            {%= frappe.datetime.str_to_user(filters.from_date) %} TO {%= frappe.datetime.str_to_user(filters.to_date) %}
+        {% } %}
+    </div>
+
+    {% 
+        var total_payments = 0;
+        for (var i = 0, l = data.length - 1; i < l; i++) {
+            total_payments += flt(data[i].payments) || 0;
+        }
+    %}
+
+    <div style="display: flex; justify-content: flex-end;">
+        <div class="balance-summary">
+            <div>
+                <span class="label">Opening Balance:</span>
+                <span class="text-right">SAR 0.00</span>
+            </div>
+            <div>
+                <span class="label">Invoiced Amount:</span>
+                <span class="text-right">{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</span>
+            </div>
+            <div>
+                <span class="label">Amount Received:</span>
+                <span class="text-right">{%= format_currency(total_payments, 'SAR', 2) %}</span>
+            </div>
+            <div>
+                <span class="label">Balance Due:</span>
+                <span class="text-right"><strong>{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Transaction</th>
+                <th>AWB/MBL No</th>
+                <th>Remarks</th>
+                <th>Invoice Date</th>
+                <th>Invoice No</th>
+                <th>Total</th>
+                <th>Payments</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr class="bold-row">
+                <td></td>
+                <td>Opening Balance</td>
+                <td></td>
+                <td></td>
+                <td>{%= frappe.datetime.str_to_user(filters.from_date) %}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right">SAR 0.00</td>
+            </tr>
+
+            {% var row_number = 1; %}
+            {% for(var i = 0; i < data.length - 1; i++) { %}
+                <tr>
+                    <td>{%= row_number %}</td>
+                    <td>{%= data[i].transaction %}</td>
+                    <td>{%= data[i].custom_awb_mbl || '' %}</td>
+                    <td>{%= data[i].custom_remarks_custom || '' %}</td>
+                    <td>{%= frappe.datetime.str_to_user(data[i].posting_date) %}</td>
+                    <td>{%= data[i].name %}</td>
+                    <td class="text-right">{%= format_currency(data[i].grand_total, 'SAR', 2) %}</td>
+                    <td class="text-right">{%= format_currency(data[i].payments, 'SAR', 2) %}</td>
+                    <td class="text-right">{%= format_currency(data[i].balance, 'SAR', 2) %}</td>
+                </tr>
+                {% row_number++; %}
+            {% } %}
+
+
+            <tr class="bold-row">
+                <td></td>
+                <td colspan="7">{%= data[data.length - 1].transaction %}</td>
+                <td class="text-right">{%= format_currency(data[data.length - 1].balance, 'SAR', 2) %}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
