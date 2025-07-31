@@ -70,11 +70,18 @@
         .balance-summary strong {
             border: none !important;
         }
-
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }  
+        tbody {
+            display: table-row-group;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 8pt;
+            page-break-inside: auto;
         }
         th, td {
             border: 1px solid #333;
