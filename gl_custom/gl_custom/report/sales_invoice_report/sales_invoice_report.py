@@ -100,6 +100,8 @@ def execute(filters=None):
 		# 		"payments": None,
 		# 		"balance": opening_balance
 		# 	})
+		if filters.company:
+			condns['company'] = filters.company
 
 	fields = ['name', 'posting_date', 'grand_total', 'outstanding_amount']
 	

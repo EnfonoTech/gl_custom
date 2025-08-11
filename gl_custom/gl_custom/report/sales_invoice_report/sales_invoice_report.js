@@ -21,6 +21,13 @@ frappe.query_reports["Sales Invoice Report"] = {
 			"label": "To Date",
 			"fieldtype": "Date",
 			"width": 100
+		},
+		{
+			"fieldname": "company",
+			"label": "Company",
+			"fieldtype": "Link",
+			"options": "Company",
+			"width": 100
 		}
 	],
 
