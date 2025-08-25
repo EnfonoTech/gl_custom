@@ -292,13 +292,13 @@
             <tbody>
                 <tr>
                     <td class="text-right">{%= flt(total_outstanding).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.under_30).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.thirty_to_sixty).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.sixty_to_ninety).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.ninety_to_120).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.hundred_twenty_to_150).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.hundred_fifty_to_180).toFixed(2) %}</td>
-                    <td class="text-right">{%= flt(ageing_summary.over_180).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under30 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under60 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under90 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under120 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under150 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_under180 || 0).toFixed(2) %}</td>
+                    <td class="text-right">{%= (data[data.length - 1].age_group.total_from180 || 0).toFixed(2) %}</td>
                 </tr>
             </tbody>
         </table>

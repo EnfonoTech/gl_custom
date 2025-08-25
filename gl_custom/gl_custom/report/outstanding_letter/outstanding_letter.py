@@ -94,12 +94,35 @@ def execute(filters=None):
 	
 	if invoices and len(invoices) != 0:
 		running_sum = 0
+		
+		total_under30 = 0
+		total_under60 = 0
+		total_under90 = 0
+		total_under120 = 0
+		total_under150 = 0
+		total_under180 = 0
+		total_from180 = 0
 
 		for idx, invoice in enumerate(invoices):
 			running_sum += invoice.outstanding_amount
 			invoice['running_total'] = running_sum
 			age = (getdate(today()) - getdate(invoice.due_date)).days
 			invoice['age'] = age
+			if age < 30:
+				total_under30 += invoice.outstanding_amount
+			elif 30 <= age < 60:
+				total_under60 += invoice.outstanding_amount
+			elif 60 <= age < 90:
+				total_under90 += invoice.outstanding_amount
+			elif 90 <= age < 120:
+				total_under120 += invoice.outstanding_amount
+			elif 120 <= age < 150:
+				total_under150 += invoice.outstanding_amount
+			elif 150 <= age < 180:
+				total_under180 += invoice.outstanding_amount
+			elif age >= 180:
+				total_from180 += invoice.outstanding_amount
+			
 			if invoice.cost_center:
 				branch = invoice.cost_center.split('-')[0].strip()
 				invoice['cost_center'] = branch
@@ -107,6 +130,17 @@ def execute(filters=None):
 				invoice['job_record'] = invoice.custom_job_record
 			elif invoice.custom_warehouse_job_record:
 				invoice['job_record'] = invoice.custom_warehouse_job_record
+
+			if idx == len(invoices)-1:
+				invoice['age_group'] = {
+					"total_under30": total_under30,
+					"total_under60": total_under60,
+					"total_under90": total_under90,
+					"total_under120": total_under120,
+					"total_under150": total_under150,
+					"total_under180": total_under180,
+					"total_from180": total_from180,
+				}
 
 		data += invoices
 
