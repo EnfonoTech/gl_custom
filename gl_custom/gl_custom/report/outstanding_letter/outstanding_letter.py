@@ -98,7 +98,8 @@ def execute(filters=None):
 		for idx, invoice in enumerate(invoices):
 			running_sum += invoice.outstanding_amount
 			invoice['running_total'] = running_sum
-			invoice['age'] = (getdate(today()) - getdate(invoice.due_date)).days
+			age = (getdate(today()) - getdate(invoice.due_date)).days
+			invoice['age'] = age
 			if invoice.cost_center:
 				branch = invoice.cost_center.split('-')[0].strip()
 				invoice['cost_center'] = branch
