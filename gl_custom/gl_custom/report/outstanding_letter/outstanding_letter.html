@@ -85,6 +85,12 @@
             border-collapse: collapse;
             margin: 15px 0;
             font-size: 9pt;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
         
         th, td {
@@ -152,6 +158,18 @@
                 margin-bottom: 10px;
                 margin-top: 10px;
                 padding: 8px;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                padding: 4px;
+                text-align: left;
+                line-height: 0.9;
             }
         }
     </style>
