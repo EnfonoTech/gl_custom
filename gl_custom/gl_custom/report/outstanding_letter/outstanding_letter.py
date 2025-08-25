@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.utils import today, getdate
+from frappe.utils.data import money_in_words
 
 
 def execute(filters=None):
@@ -141,6 +142,8 @@ def execute(filters=None):
 					"total_under180": total_under180,
 					"total_from180": total_from180,
 				}
+
+				invoice['total_in_words'] = money_in_words(running_sum, "SAR")
 
 		data += invoices
 

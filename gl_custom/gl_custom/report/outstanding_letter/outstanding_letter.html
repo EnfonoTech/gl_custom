@@ -123,7 +123,7 @@
         .amount-in-words {
             margin: 10px 0;
             font-weight: bold;
-            text-align: center;
+            text-align: end;
             font-size: 10pt;
         }
         
@@ -195,7 +195,7 @@
             
             Please find here below the details of your outstanding invoices as of today. 
             <strong>({%= frappe.datetime.str_to_user(frappe.datetime.get_today()) %})</strong> 
-            Requesting you to settle the same at the earliest. your outstanding post due balance is 
+            Requesting you to settle the same at the earliest, your outstanding past due balance is 
             <strong>(SAR {% 
                 var total_outstanding = 0;
                 for (var i = 0; i < data.length; i++) { 
@@ -269,7 +269,8 @@
         </table>
         
         <div class="amount-in-words">
-            Twenty-One thousand Four Hundred and Ninety-Three and fifty Only &nbsp;&nbsp;&nbsp;&nbsp; {%= flt(total_outstanding).toFixed(2) %}
+            {%= (data[data.length - 1].total_in_words || '') %} &nbsp;&nbsp;&nbsp;&nbsp; {%= flt(total_outstanding).toFixed(2) %}
+
         </div>
     </div>
     
