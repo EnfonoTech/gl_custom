@@ -59,7 +59,8 @@ def execute(filters=None):
 	]
 
 	condns = {
-		'docstatus': 1
+		'docstatus': 1,
+		'outstanding_amount': ['>', 0]
 	}
 	data = []
 	address_display = None
